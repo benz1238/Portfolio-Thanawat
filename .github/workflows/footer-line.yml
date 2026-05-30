@@ -1,0 +1,29 @@
+name: Footer line
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/footer-line.yml
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          for f in ('index.html','works.html','about.html'):
+              p=Path(f)
+              s=p.read_text(encoding='utf-8')
+              s=s.replace('© 2026 Thanawat Singkilwit. All rights reserved.','© 2026 Thanawat Singkilwit.<span>All rights reserved.</span>')
+              s=s.replace('.copy{font:500 10px/1.4 var(--mono);letter-spacing:.08em;color:var(--muted);text-transform:uppercase;text-align:right}', '.copy{font:500 10px/1.4 var(--mono);letter-spacing:.08em;color:var(--muted);text-transform:uppercase;text-align:right}.copy span{display:block;margin-top:6px}')
+              p.write_text(s, encoding='utf-8')
+          PY
+      - run: |
+          git config user.name ChatGPT
+          git config user.email actions@github.com
+          git add index.html works.html about.html
+          git commit -m "Break footer copyright line" || exit 0
+          git push
