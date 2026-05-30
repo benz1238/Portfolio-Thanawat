@@ -1,0 +1,51 @@
+name: Refactor CSS external
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/refactor-css-external.yml
+permissions:
+  contents: write
+jobs:
+  refactor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Move inline CSS to assets/css
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+
+          pages = {
+              'index.html': 'home.css',
+              'works.html': 'works.css',
+              'about.html': 'about.css',
+              'shokubutsu.html': 'shokubutsu.css',
+          }
+          out_dir = Path('assets/css')
+          out_dir.mkdir(parents=True, exist_ok=True)
+
+          for html_name, css_name in pages.items():
+              path = Path(html_name)
+              if not path.exists():
+                  continue
+              text = path.read_text(encoding='utf-8')
+              match = re.search(r'<style>\s*(.*?)\s*</style>', text, flags=re.S)
+              if not match:
+                  continue
+              css = match.group(1).strip() + '\n'
+              (out_dir / css_name).write_text(css, encoding='utf-8')
+              link = f'<link rel="stylesheet" href="assets/css/{css_name}">'
+              text = text[:match.start()] + link + text[match.end():]
+              path.write_text(text, encoding='utf-8')
+          PY
+      - name: Remove workflow
+        run: rm -f .github/workflows/refactor-css-external.yml
+      - name: Commit changes
+        run: |
+          git config user.name ChatGPT
+          git config user.email actions@github.com
+          git add index.html works.html about.html shokubutsu.html assets/css .github/workflows/refactor-css-external.yml
+          git commit -m "Refactor page CSS into external files" || exit 0
+          git push
