@@ -1,0 +1,155 @@
+name: Fix final polish overrides
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/fix-final-polish-overrides.yml
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          polish = r'''
+/* final polish overrides — loaded last */
+
+/* WORKS: feature cards vivid from first render */
+.feature-card img{
+  filter:none!important;
+  transform:scale(1.01)!important;
+}
+.feature-card:hover img{
+  filter:none!important;
+  transform:scale(1.018)!important;
+}
+
+/* WORKS: remove weird sluggish filter feel */
+.filter-btn{
+  transition:background .16s ease,color .16s ease,border-color .16s ease,transform .16s ease!important;
+}
+.archive,.work-item{
+  transition:opacity .18s ease,transform .18s cubic-bezier(.16,1,.3,1),border-color .18s ease,box-shadow .18s ease!important;
+}
+.work-item.is-hidden{
+  display:none!important;
+}
+
+/* CTA: dropdown must match Start a conversation button width */
+.cta{--contact-w:300px!important;overflow:visible!important;}
+.contact-trigger{
+  width:var(--contact-w)!important;
+  min-width:var(--contact-w)!important;
+  max-width:var(--contact-w)!important;
+  justify-content:center!important;
+}
+.contact-options{
+  width:var(--contact-w)!important;
+  min-width:var(--contact-w)!important;
+  max-width:var(--contact-w)!important;
+}
+@media(max-width:767px){
+  .cta{--contact-w:min(300px,calc(100% - 56px))!important;}
+  .contact-trigger{
+    width:var(--contact-w)!important;
+    min-width:0!important;
+    max-width:var(--contact-w)!important;
+    display:flex!important;
+    justify-content:center!important;
+    margin-top:22px!important;
+  }
+  .contact-options{
+    width:var(--contact-w)!important;
+    min-width:0!important;
+    max-width:var(--contact-w)!important;
+    left:28px!important;
+    right:auto!important;
+    top:calc(100% - 18px)!important;
+  }
+}
+
+/* ABOUT: clean profile card */
+.profile-card{
+  display:flex!important;
+  align-items:flex-end!important;
+  justify-content:center!important;
+  padding-top:96px!important;
+}
+.profile-card:after,
+.profile-card .portrait-fade{
+  display:none!important;
+  content:none!important;
+  opacity:0!important;
+}
+.profile-card img{
+  position:absolute!important;
+  left:50%!important;
+  top:auto!important;
+  bottom:0!important;
+  width:min(82%,460px)!important;
+  height:auto!important;
+  object-fit:contain!important;
+  transform:translateX(-50%)!important;
+  animation:profileCleanFloat 5.5s ease-in-out .8s infinite!important;
+  z-index:2!important;
+}
+.profile-note{
+  top:30px!important;
+  left:30px!important;
+  z-index:7!important;
+  font-size:0!important;
+}
+.profile-note:after{
+  content:'THANAWAT.S';
+  font:800 10px/1 var(--mono);
+  letter-spacing:.12em;
+}
+@keyframes profileCleanFloat{
+  0%,100%{transform:translateX(-50%) translateY(0)}
+  50%{transform:translateX(-50%) translateY(-8px)}
+}
+@media(max-width:767px){
+  .profile-card{min-height:560px!important;padding-top:110px!important;}
+  .profile-card img{width:min(88%,430px)!important;}
+}
+'''.strip()+"\n"
+          css_path = Path('assets/css/final-polish.css')
+          css_path.parent.mkdir(parents=True, exist_ok=True)
+          css_path.write_text(polish, encoding='utf-8')
+
+          # load final-polish.css last on all pages
+          for name in ['index.html','works.html','about.html','shokubutsu.html']:
+            p = Path(name)
+            if not p.exists():
+              continue
+            s = p.read_text(encoding='utf-8')
+            if 'assets/css/final-polish.css' not in s:
+              s = s.replace('</head>', '  <link rel="stylesheet" href="assets/css/final-polish.css">\n</head>')
+            p.write_text(s, encoding='utf-8')
+
+          # hard update about markup so it is correct even before CSS loads
+          p = Path('about.html')
+          s = p.read_text(encoding='utf-8')
+          s = s.replace('<div class="profile-note">Profile Cutout</div>', '<div class="profile-note">THANAWAT.S</div>')
+          s = s.replace('<div class="portrait-fade"></div>', '')
+          p.write_text(s, encoding='utf-8')
+
+          # Works: use native smooth scroll, faster and less strange than custom easing
+          p = Path('works.html')
+          s = p.read_text(encoding='utf-8')
+          s = s.replace('smoothScrollTo(Math.max(0,y),1280);', 'window.scrollTo({top:Math.max(0,y),behavior:\'smooth\'});')
+          s = s.replace('smoothScrollTo(Math.max(0,y),720);', 'window.scrollTo({top:Math.max(0,y),behavior:\'smooth\'});')
+          s = s.replace('}},190);', '}},60);')
+          s = s.replace('}},80);', '}},60);')
+          p.write_text(s, encoding='utf-8')
+          PY
+          rm -f .github/workflows/fix-final-polish-overrides.yml
+          git config user.name ChatGPT
+          git config user.email actions@github.com
+          git add index.html works.html about.html shokubutsu.html assets/css/final-polish.css .github/workflows/fix-final-polish-overrides.yml
+          git commit -m "Fix Works filters CTA sizing and About profile polish" || exit 0
+          git push
