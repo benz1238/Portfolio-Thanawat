@@ -1,0 +1,42 @@
+name: Restore selected static layout
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/restore-selected-static-layout.yml
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Restore selected works final position and keep subtle entrance
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          css = Path('assets/site-motion.css').read_text(encoding='utf-8')
+          start = css.find('.selected-card-in{')
+          end = css.find('.magnetic{', start)
+          replacement = ".selected-card-in{opacity:0;filter:blur(7px);transform:translate3d(0,22px,0) scale(.988);transition:opacity .82s cubic-bezier(.16,1,.3,1),filter .82s cubic-bezier(.16,1,.3,1),transform .82s cubic-bezier(.16,1,.3,1);transition-delay:var(--selected-delay,0ms)}.selected-card-in.is-visible{opacity:1;filter:blur(0);transform:none}"
+          if start != -1 and end != -1:
+              css = css[:start] + replacement + css[end:]
+          css = css.replace('.motion-reveal,.selected-card-in{opacity:1!important;filter:none!important;transform:none!important;translate:0 0!important;transition:none!important}', '.motion-reveal,.selected-card-in{opacity:1!important;filter:none!important;transform:none!important;transition:none!important}')
+          Path('assets/site-motion.css').write_text(css, encoding='utf-8')
+
+          # Keep Home layout as the original absolute card stack, but make Shokubutsu clickable without changing tag/display.
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+          s = s.replace('<article class="card shoku overlay no-save">', '<article class="card shoku overlay no-save" role="link" tabindex="0" onclick="location.href=\'shokubutsu.html\'" onkeydown="if(event.key===\'Enter\'){location.href=\'shokubutsu.html\'}">')
+          p.write_text(s, encoding='utf-8')
+          PY
+      - name: Remove workflow
+        run: rm -f .github/workflows/restore-selected-static-layout.yml
+      - name: Commit patch
+        run: |
+          git config user.name ChatGPT
+          git config user.email actions@github.com
+          git add index.html assets/site-motion.css .github/workflows/restore-selected-static-layout.yml
+          git commit -m "Restore selected works final layout" || exit 0
+          git push
