@@ -1,0 +1,33 @@
+name: Apply site motion
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/apply-site-motion.yml
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          for f in ['index.html','works.html','about.html','shokubutsu.html']:
+              p=Path(f)
+              if not p.exists(): continue
+              s=p.read_text(encoding='utf-8')
+              if 'assets/site-motion.css' not in s:
+                  s=s.replace('</head>', '  <link rel="stylesheet" href="assets/site-motion.css">\n</head>')
+              if 'assets/site-motion.js' not in s:
+                  s=s.replace('</body>', '  <script src="assets/site-motion.js"></script>\n</body>')
+              p.write_text(s, encoding='utf-8')
+          PY
+      - run: |
+          rm -f .github/workflows/apply-site-motion.yml
+          git config user.name ChatGPT
+          git config user.email actions@github.com
+          git add index.html works.html about.html shokubutsu.html .github/workflows/apply-site-motion.yml
+          git commit -m "Apply global motion system" || exit 0
+          git push
