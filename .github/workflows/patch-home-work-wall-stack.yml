@@ -1,0 +1,40 @@
+name: Patch Home work wall stack
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/patch-home-work-wall-stack.yml
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Patch only Home stacked work layout
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+          old = ".wall{position:relative;max-width:1400px;min-height:1480px;margin:0 auto 38px}.wall:before{content:\"\";position:absolute;top:-80px;left:50%;width:1px;height:90px;background:linear-gradient(transparent,rgba(223,255,0,.5))}.card{position:absolute;background:var(--surface2);border:1px solid var(--line);border-radius:24px;overflow:hidden;transition:transform .45s cubic-bezier(.18,.9,.22,1),border-color .35s ease;box-shadow:0 20px 60px rgba(0,0,0,.38);-webkit-touch-callout:none;user-select:none}"
+          new = ".wall{position:relative;max-width:1180px;min-height:1040px;margin:0 auto 38px}.wall:before{content:\"\";position:absolute;top:-78px;left:50%;width:1px;height:110px;background:linear-gradient(transparent,rgba(223,255,0,.5))}.card{position:absolute;background:var(--surface2);border:1px solid var(--line);border-radius:24px;overflow:hidden;transition:transform .45s cubic-bezier(.18,.9,.22,1),border-color .35s ease,box-shadow .45s cubic-bezier(.18,.9,.22,1);box-shadow:0 20px 60px rgba(0,0,0,.38);-webkit-touch-callout:none;user-select:none}"
+          if old not in s:
+              raise SystemExit('wall block not found')
+          s = s.replace(old, new)
+          old2 = ".shoku{left:0;top:0;width:68%;z-index:3}.ext{right:0;top:120px;width:34%;z-index:4}.air{left:4%;top:590px;width:39%;z-index:6}.shell{right:2%;top:500px;width:54%;z-index:5}.paecal{left:8%;top:960px;width:33%;z-index:7}.birdy{right:8%;top:900px;width:43%;z-index:6}.shoku:hover{transform:translate(-18px,-8px)}.ext:hover{transform:translate(30px,-8px) scale(1.015)}.air:hover{transform:translate(-58px,-10px) scale(1.018)}.shell:hover{transform:translate(52px,-10px) scale(1.013)}.paecal:hover{transform:translate(-46px,-10px) scale(1.02)}.birdy:hover{transform:translate(44px,-10px) scale(1.013)}"
+          new2 = ".shoku{left:2%;top:0;width:52%;z-index:8}.ext{right:4%;top:84px;width:42%;z-index:4}.air{left:7%;top:392px;width:30%;z-index:7}.shell{right:13%;top:322px;width:44%;z-index:9}.birdy{left:17%;top:648px;width:28%;z-index:10}.paecal{right:18%;top:610px;width:34%;z-index:11}.shoku:hover{transform:translate(-24px,-10px) scale(1.018);box-shadow:0 30px 90px rgba(0,0,0,.48)}.ext:hover{transform:translate(42px,-8px) scale(1.012);box-shadow:0 30px 90px rgba(0,0,0,.48)}.air:hover{transform:translate(-42px,-12px) scale(1.018);box-shadow:0 30px 90px rgba(0,0,0,.48)}.shell:hover{transform:translate(46px,-12px) scale(1.014);box-shadow:0 30px 90px rgba(0,0,0,.48)}.birdy:hover{transform:translate(-34px,12px) scale(1.018);box-shadow:0 30px 90px rgba(0,0,0,.48)}.paecal:hover{transform:translate(36px,12px) scale(1.018);box-shadow:0 30px 90px rgba(0,0,0,.48)}"
+          if old2 not in s:
+              raise SystemExit('card position block not found')
+          s = s.replace(old2, new2)
+          p.write_text(s, encoding='utf-8')
+          PY
+      - name: Remove workflow
+        run: rm -f .github/workflows/patch-home-work-wall-stack.yml
+      - name: Commit patch
+        run: |
+          git config user.name ChatGPT
+          git config user.email actions@github.com
+          git add index.html .github/workflows/patch-home-work-wall-stack.yml
+          git commit -m "Tighten Home stacked work wall layout" || exit 0
+          git push
