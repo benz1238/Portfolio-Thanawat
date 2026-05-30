@@ -1,0 +1,40 @@
+name: Patch Home wall guide position
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/patch-home-wall-guide-position.yml
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Reposition Home work wall to guide
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+          old = '.wall{position:relative;max-width:1180px;min-height:1040px;margin:0 auto 38px}'
+          new = '.wall{position:relative;max-width:1180px;min-height:1160px;margin:0 auto 38px}'
+          if old not in s:
+              raise SystemExit('wall size block not found')
+          s = s.replace(old, new)
+          old_pos = '.shoku{left:2%;top:0;width:52%;z-index:8}.ext{right:4%;top:84px;width:42%;z-index:4}.air{left:7%;top:392px;width:30%;z-index:7}.shell{right:13%;top:322px;width:44%;z-index:9}.birdy{left:17%;top:648px;width:28%;z-index:10}.paecal{right:18%;top:610px;width:34%;z-index:11}'
+          new_pos = '.shoku{left:2%;top:118px;width:52%;z-index:8}.ext{right:4%;top:202px;width:42%;z-index:4}.air{left:7%;top:510px;width:30%;z-index:7}.shell{right:13%;top:440px;width:44%;z-index:9}.birdy{left:17%;top:766px;width:28%;z-index:10}.paecal{right:18%;top:728px;width:34%;z-index:11}'
+          if old_pos not in s:
+              raise SystemExit('card position block not found')
+          s = s.replace(old_pos, new_pos)
+          p.write_text(s, encoding='utf-8')
+          PY
+      - name: Remove workflow
+        run: rm -f .github/workflows/patch-home-wall-guide-position.yml
+      - name: Commit patch
+        run: |
+          git config user.name ChatGPT
+          git config user.email actions@github.com
+          git add index.html .github/workflows/patch-home-wall-guide-position.yml
+          git commit -m "Reposition Home work wall to guide" || exit 0
+          git push
