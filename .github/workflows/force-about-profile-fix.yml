@@ -1,0 +1,44 @@
+name: Force About profile fix
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/force-about-profile-fix.yml
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path('about.html')
+          s = p.read_text(encoding='utf-8')
+          s = s.replace('href="assets/css/about.css"', 'href="assets/css/about.css?v=34"')
+          s = s.replace('href="assets/site-motion.css"', 'href="assets/site-motion.css?v=34"')
+          s = s.replace('href="assets/css/final-polish.css"', 'href="assets/css/final-polish.css?v=34"')
+          s = s.replace('<div class="profile-note">Profile Cutout</div>', '<div class="profile-note">THANAWAT.S</div>')
+          s = s.replace('<div class="portrait-fade"></div>', '')
+          s = s.replace('src="assets/Profile-Thanawat.png?v=2"', 'src="assets/Profile-Thanawat.png?v=34"')
+          inline = '''
+  <style id="force-about-profile-fix">
+    .profile-card{display:flex!important;align-items:flex-end!important;justify-content:center!important;padding-top:128px!important;overflow:hidden!important;}
+    .profile-card:after,.profile-card .portrait-fade{display:none!important;content:none!important;opacity:0!important;background:none!important;}
+    .profile-card img{position:absolute!important;left:50%!important;top:auto!important;bottom:0!important;width:min(78%,440px)!important;height:auto!important;object-fit:contain!important;transform:translateX(-50%)!important;z-index:2!important;}
+    .profile-note{top:30px!important;left:30px!important;z-index:7!important;font-size:0!important;}
+    .profile-note:after{content:'THANAWAT.S';font:800 10px/1 var(--mono);letter-spacing:.12em;}
+    @media(max-width:767px){.profile-card{min-height:620px!important;padding-top:138px!important}.profile-card img{width:min(86%,420px)!important;bottom:0!important}}
+  </style>
+'''
+          if 'force-about-profile-fix' not in s:
+              s = s.replace('</head>', inline + '</head>')
+          p.write_text(s, encoding='utf-8')
+          PY
+          rm -f .github/workflows/force-about-profile-fix.yml
+          git config user.name ChatGPT
+          git config user.email actions@github.com
+          git add about.html .github/workflows/force-about-profile-fix.yml
+          git commit -m "Force About profile card cleanup" || exit 0
+          git push
