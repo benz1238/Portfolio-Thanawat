@@ -1,0 +1,24 @@
+name: Hard rollback Works before motion
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/hard-rollback-works-before-motion.yml
+permissions:
+  contents: write
+jobs:
+  rollback:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Restore works.html to pre-motion locked state
+        run: |
+          git checkout 95cf1cdceb6c1c3d45edec6590012c47d0172e3d^ -- works.html
+          rm -f .github/workflows/hard-rollback-works-before-motion.yml
+          git config user.name ChatGPT
+          git config user.email actions@github.com
+          git add works.html .github/workflows/hard-rollback-works-before-motion.yml
+          git commit -m "Hard rollback Works page before motion ref" || exit 0
+          git push
