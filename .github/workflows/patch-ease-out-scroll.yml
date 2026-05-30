@@ -1,0 +1,39 @@
+name: Patch ease out filter scroll
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/patch-ease-out-scroll.yml
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Patch custom ease-out scroll
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path('works.html')
+          s = p.read_text(encoding='utf-8')
+          old = "const target=f==='all'?document.querySelector('#featured-head'):document.querySelector('#archive-title');setTimeout(()=>{if(target){const nav=document.querySelector('.nav')?.offsetHeight||86;const y=target.getBoundingClientRect().top+window.pageYOffset-nav-26;window.scrollTo({top:Math.max(0,y),behavior:'smooth'});}},160);"
+          new = "const target=f==='all'?document.querySelector('#featured-head'):document.querySelector('#archive-title');setTimeout(()=>{if(target){const nav=document.querySelector('.nav')?.offsetHeight||86;const y=target.getBoundingClientRect().top+window.pageYOffset-nav-34;smoothScrollTo(Math.max(0,y),920);}},190);"
+          if old not in s:
+              raise SystemExit('scroll snippet not found')
+          s = s.replace(old, new)
+          anchor = "const filterButtons=[...document.querySelectorAll('.filter-btn')]"
+          helper = "function smoothScrollTo(targetY,duration=900){const startY=window.pageYOffset;const diff=targetY-startY;let start=null;const ease=t=>1-Math.pow(1-t,4);function step(ts){if(!start)start=ts;const p=Math.min((ts-start)/duration,1);window.scrollTo(0,startY+diff*ease(p));if(p<1)requestAnimationFrame(step);}requestAnimationFrame(step);}"
+          if helper not in s:
+              s = s.replace(anchor, helper + anchor)
+          p.write_text(s, encoding='utf-8')
+          PY
+      - name: Remove workflow
+        run: rm -f .github/workflows/patch-ease-out-scroll.yml
+      - name: Commit patch
+        run: |
+          git config user.name ChatGPT
+          git config user.email actions@github.com
+          git add works.html .github/workflows/patch-ease-out-scroll.yml
+          git commit -m "Add ease out scroll for works filters" || exit 0
+          git push
