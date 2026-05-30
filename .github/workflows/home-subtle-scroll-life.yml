@@ -1,0 +1,42 @@
+name: Home subtle scroll life
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/home-subtle-scroll-life.yml
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Add subtle entrance motion without changing final layout
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+          css_anchor = '@media(max-width:767px)'
+          css = '''.section-intro,.view-all,.about-strip,.cta{opacity:0;transform:translate3d(0,18px,0);filter:blur(6px);transition:opacity .78s cubic-bezier(.16,1,.3,1),transform .78s cubic-bezier(.16,1,.3,1),filter .78s cubic-bezier(.16,1,.3,1)}.section-intro.is-visible,.view-all.is-visible,.about-strip.is-visible,.cta.is-visible{opacity:1;transform:none;filter:blur(0)}.wall .card{opacity:0;filter:blur(7px);transform:translate3d(0,24px,0) scale(.992)}.wall.is-visible .card{opacity:1;filter:blur(0);transform:none}.wall.is-visible .card:nth-child(1){transition-delay:.04s}.wall.is-visible .card:nth-child(2){transition-delay:.12s}.wall.is-visible .card:nth-child(3){transition-delay:.20s}.wall.is-visible .card:nth-child(4){transition-delay:.28s}.wall.is-visible .card:nth-child(5){transition-delay:.36s}.wall.is-visible .card:nth-child(6){transition-delay:.44s}.wall .card{transition:opacity .82s cubic-bezier(.16,1,.3,1),filter .82s cubic-bezier(.16,1,.3,1),transform .82s cubic-bezier(.16,1,.3,1),border-color .35s ease,box-shadow .45s cubic-bezier(.16,1,.3,1)}.wall.is-visible .card:hover{transition-delay:0s}.wall.is-visible .shoku:hover{transform:translate(-24px,-10px) scale(1.018);box-shadow:0 30px 90px rgba(0,0,0,.48)}.wall.is-visible .ext:hover{transform:translate(42px,-8px) scale(1.012);box-shadow:0 30px 90px rgba(0,0,0,.48)}.wall.is-visible .air:hover{transform:translate(-42px,-12px) scale(1.018);box-shadow:0 30px 90px rgba(0,0,0,.48)}.wall.is-visible .shell:hover{transform:translate(46px,-12px) scale(1.014);box-shadow:0 30px 90px rgba(0,0,0,.48)}.wall.is-visible .birdy:hover{transform:translate(-34px,12px) scale(1.018);box-shadow:0 30px 90px rgba(0,0,0,.48)}.wall.is-visible .paecal:hover{transform:translate(36px,12px) scale(1.018);box-shadow:0 30px 90px rgba(0,0,0,.48)}@media(prefers-reduced-motion:reduce){.section-intro,.view-all,.about-strip,.cta,.wall .card{opacity:1!important;filter:none!important;transform:none!important;transition:none!important}}'''
+          if css not in s:
+              if css_anchor not in s:
+                  raise SystemExit('css anchor not found')
+              s = s.replace(css_anchor, css + css_anchor)
+          js_anchor = 'setupMobileCardMotion();mobileQuery.addEventListener(\'change\',setupMobileCardMotion);'
+          js = '''const lifeItems=[document.querySelector('.section-intro'),document.querySelector('.wall'),document.querySelector('.view-all'),document.querySelector('.about-strip'),document.querySelector('.cta')].filter(Boolean);const lifeObserver=new IntersectionObserver((entries)=>{entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('is-visible');lifeObserver.unobserve(entry.target)}})},{threshold:.18,rootMargin:'0px 0px -10% 0px'});lifeItems.forEach(item=>lifeObserver.observe(item));'''
+          if js not in s:
+              if js_anchor not in s:
+                  raise SystemExit('js anchor not found')
+              s = s.replace(js_anchor, js_anchor + js)
+          p.write_text(s, encoding='utf-8')
+          PY
+      - name: Remove workflow
+        run: rm -f .github/workflows/home-subtle-scroll-life.yml
+      - name: Commit patch
+        run: |
+          git config user.name ChatGPT
+          git config user.email actions@github.com
+          git add index.html .github/workflows/home-subtle-scroll-life.yml
+          git commit -m "Add subtle Home scroll entrance motion" || exit 0
+          git push
