@@ -1,0 +1,28 @@
+name: Patch about fade
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: [.github/workflows/patch-about-fade.yml]
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          s = Path('about.html').read_text()
+          s = s.replace('height:34%;z-index:3;pointer-events:none;background:linear-gradient(transparent,rgba(0,0,0,.18) 42%,rgba(0,0,0,.36));mix-blend-mode:multiply', 'height:38%;z-index:5;pointer-events:none;background:linear-gradient(to top,rgba(0,0,0,.34) 0%,rgba(0,0,0,.22) 42%,rgba(0,0,0,0) 100%);mix-blend-mode:multiply')
+          s = s.replace('color:rgba(255,255,255,.13);font:900 54px/.9 var(--head);letter-spacing:-.06em;z-index:3;', 'color:rgba(255,255,255,.15);font:900 54px/.9 var(--head);letter-spacing:-.06em;z-index:6;')
+          s = s.replace('z-index:4;background:var(--acid)', 'z-index:7;background:var(--acid)')
+          Path('about.html').write_text(s)
+          PY
+      - run: |
+          git config user.name ChatGPT
+          git config user.email actions@github.com
+          git add about.html
+          git commit -m "Refine profile fade layer" || exit 0
+          git push
