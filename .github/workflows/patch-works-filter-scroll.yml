@@ -1,0 +1,35 @@
+name: Patch works filter scroll
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/patch-works-filter-scroll.yml
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Patch filter scroll behavior
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path('works.html')
+          s = p.read_text(encoding='utf-8')
+          old = "title.innerHTML=labels[f][0];copy.textContent=labels[f][1];}));"
+          new = "title.innerHTML=labels[f][0];copy.textContent=labels[f][1];const target=f==='all'?document.querySelector('#featured-head'):document.querySelector('#archive-title');setTimeout(()=>{target?.scrollIntoView({behavior:'smooth',block:'start'});},80);}));"
+          if old not in s:
+              raise SystemExit('target filter script snippet not found')
+          s = s.replace(old, new)
+          p.write_text(s, encoding='utf-8')
+          PY
+      - name: Remove workflow
+        run: rm -f .github/workflows/patch-works-filter-scroll.yml
+      - name: Commit patch
+        run: |
+          git config user.name ChatGPT
+          git config user.email actions@github.com
+          git add works.html .github/workflows/patch-works-filter-scroll.yml
+          git commit -m "Scroll to works after filter selection" || exit 0
+          git push
