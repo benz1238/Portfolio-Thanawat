@@ -1,0 +1,227 @@
+/* Mobile responsive refinement for Home only.
+   Keeps the existing dark orbital direction while tightening small-screen layout. */
+
+@media (max-width: 767px) {
+  :root {
+    --mx: clamp(20px, 5.8vw, 26px);
+  }
+
+  .nav {
+    min-height: 78px;
+    padding: 19px var(--mx);
+  }
+
+  .mobile-panel {
+    inset: 80px var(--mx) auto;
+  }
+
+  main {
+    padding-top: 96px;
+    padding-bottom: 72px;
+  }
+
+  .hero {
+    min-height: calc(100svh - 96px);
+    margin-bottom: 78px;
+    padding: 18px 0 30px;
+  }
+
+  .hero > div:last-child {
+    max-width: 100%;
+  }
+
+  .hero h1 {
+    font-size: clamp(42px, 11.9vw, 56px);
+    line-height: .93;
+    letter-spacing: -.06em;
+    max-width: 9.8ch;
+  }
+
+  .hero p {
+    max-width: 340px;
+    margin-top: 24px;
+  }
+
+  .orb,
+  .orbit-tags {
+    left: -34%;
+    top: 46%;
+    width: min(520px, 136vw);
+    height: min(520px, 136vw);
+  }
+
+  .orb {
+    opacity: .68;
+  }
+
+  .orbit-tags {
+    opacity: .92;
+  }
+
+  .orbit-tag {
+    box-shadow: 0 0 18px rgba(223, 255, 0, .22);
+  }
+
+  .cap {
+    z-index: 1;
+    opacity: .52;
+  }
+
+  .c1 {
+    left: 6%;
+    top: 8%;
+  }
+
+  .c2 {
+    right: 3%;
+    top: 18%;
+  }
+
+  .c3 {
+    right: 35%;
+    top: 5%;
+  }
+
+  .c4 {
+    left: 2%;
+    bottom: 13%;
+    opacity: .36;
+  }
+
+  .c5 {
+    right: 3%;
+    bottom: 9%;
+    opacity: .36;
+  }
+
+  .section-intro {
+    margin-bottom: 38px;
+  }
+
+  .section-intro p {
+    max-width: 360px;
+  }
+
+  .wall {
+    gap: 26px;
+    margin-bottom: 44px;
+  }
+
+  .wall .card {
+    width: 100% !important;
+    box-shadow: 0 18px 50px rgba(0, 0, 0, .42);
+  }
+
+  .wall .card:nth-child(even) {
+    width: calc(100% - 18px) !important;
+    margin-left: auto;
+  }
+
+  .wall .card:nth-child(3),
+  .wall .card:nth-child(5) {
+    width: calc(100% - 12px) !important;
+    margin-right: auto;
+  }
+
+  .shoku .frame {
+    aspect-ratio: 4 / 5;
+  }
+
+  .ext .frame,
+  .shell .frame {
+    aspect-ratio: 4 / 3;
+  }
+
+  .air .frame,
+  .birdy .frame,
+  .paecal .frame {
+    aspect-ratio: 16 / 10;
+  }
+
+  .card.is-inview {
+    border-color: rgba(223, 255, 0, .42);
+  }
+
+  .card.is-inview img {
+    filter: grayscale(0);
+  }
+
+  .wall.is-visible .shoku:hover,
+  .wall.is-visible .ext:hover,
+  .wall.is-visible .air:hover,
+  .wall.is-visible .shell:hover,
+  .wall.is-visible .birdy:hover,
+  .wall.is-visible .paecal:hover {
+    transform: none;
+  }
+
+  .view-all {
+    margin-bottom: 70px;
+  }
+
+  .view-all a {
+    min-height: 58px;
+    padding: 19px 24px;
+  }
+
+  .about-strip {
+    margin-bottom: 76px;
+  }
+
+  .cta {
+    margin-bottom: 82px;
+  }
+
+  .contact-trigger {
+    width: 100%;
+    max-width: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .contact-options {
+    left: 28px;
+    right: 28px;
+    width: auto;
+    top: calc(100% - 12px);
+  }
+}
+
+@media (max-width: 390px) {
+  .hero h1 {
+    font-size: clamp(40px, 11.2vw, 45px);
+    max-width: 10ch;
+  }
+
+  .hero p {
+    font-size: 13px;
+    line-height: 1.58;
+  }
+
+  .orb,
+  .orbit-tags {
+    left: -42%;
+    width: min(500px, 142vw);
+    height: min(500px, 142vw);
+  }
+
+  .cap {
+    width: 68px;
+    height: 68px;
+  }
+
+  .c3,
+  .c5 {
+    width: 56px;
+    height: 56px;
+  }
+
+  .section-intro p {
+    font-size: 15px;
+  }
+
+  .wall {
+    gap: 22px;
+  }
+}
