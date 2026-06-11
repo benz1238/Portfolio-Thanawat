@@ -1,9 +1,49 @@
-/* Final Shokubutsu fixes: remove duplicated hero feel, tighten mobile rhythm, and match media frames to actual asset ratios. */
+/* Final Shokubutsu fixes: remove duplicated hero feel, tighten mobile rhythm, match media frames, and improve headline readability. */
 
 /* No reused Home capsule images on this detail page. */
 .shkb-orbit-hero .cap,
 .hero-board {
   display: none !important;
+}
+
+/* Typography: the original compressed headline treatment was too tight for long case-study copy. */
+.shkb-orbit-hero h1,
+.chapter-copy h2,
+.media-caption h3,
+.embed-copy h3,
+.archive-note h3,
+.takeaway-stack h2,
+.external-link strong,
+.stack-nav a {
+  letter-spacing: -0.038em !important;
+  word-spacing: .02em;
+}
+
+.shkb-orbit-hero h1 {
+  line-height: .84 !important;
+}
+
+.chapter-copy h2,
+.takeaway-stack h2 {
+  line-height: .9 !important;
+}
+
+.media-caption h3,
+.embed-copy h3,
+.archive-note h3 {
+  line-height: .98 !important;
+}
+
+.hero-brief p,
+.chapter-copy p,
+.media-caption p,
+.embed-copy p,
+.proof-caption p,
+.role-note p,
+.archive-note p,
+.takeaway-stack p {
+  letter-spacing: 0 !important;
+  word-spacing: .01em;
 }
 
 /* The page should open into the campaign stack, not float forever before the work. */
@@ -170,8 +210,9 @@
   }
 
   .shkb-orbit-hero h1 {
-    font-size: clamp(50px, 15.5vw, 76px);
-    line-height: .8;
+    font-size: clamp(48px, 14.5vw, 72px);
+    line-height: .86 !important;
+    letter-spacing: -0.032em !important;
   }
 
   .work-kicker {
@@ -204,6 +245,7 @@
     padding: 13px 14px;
     border-radius: 18px;
     font-size: 16px;
+    letter-spacing: -0.02em !important;
   }
 
   .campaign-chapter {
@@ -217,14 +259,15 @@
 
   .chapter-copy h2 {
     margin-top: 12px;
-    font-size: clamp(32px, 9.5vw, 46px);
-    line-height: .86;
+    font-size: clamp(31px, 8.8vw, 44px);
+    line-height: .94 !important;
+    letter-spacing: -0.028em !important;
   }
 
   .chapter-copy p {
     margin-top: 12px;
     font-size: 14px;
-    line-height: 1.52;
+    line-height: 1.56;
   }
 
   .chapter-vacation .frame-kv,
@@ -243,8 +286,9 @@
   .media-caption h3,
   .embed-copy h3,
   .archive-note h3 {
-    font-size: 24px;
-    line-height: .92;
+    font-size: 23px;
+    line-height: 1 !important;
+    letter-spacing: -0.02em !important;
   }
 
   .external-link {
@@ -253,7 +297,8 @@
   }
 
   .external-link strong {
-    font-size: 26px;
+    font-size: 25px;
+    line-height: .95;
   }
 
   .role-note,
