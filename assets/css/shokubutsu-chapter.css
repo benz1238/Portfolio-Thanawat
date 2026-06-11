@@ -1,0 +1,372 @@
+/* Shokubutsu brand chapter overrides: turns the generic work-detail shell into a multi-campaign story. */
+
+.shkb-hero-visual {
+  position: relative;
+  max-width: 1400px;
+  margin: 0 auto 92px;
+  border: 1px solid rgba(223, 255, 0, .22);
+  border-radius: 36px;
+  overflow: hidden;
+  background: #171717;
+  box-shadow: 0 34px 110px rgba(0, 0, 0, .52);
+}
+
+.shkb-hero-visual::after {
+  content: "CAMPAIGN STACK";
+  position: absolute;
+  left: 26px;
+  bottom: 24px;
+  border: 1px solid rgba(223, 255, 0, .32);
+  border-radius: 999px;
+  padding: 9px 13px;
+  background: rgba(10, 10, 10, .68);
+  color: var(--acid);
+  font: 900 10px/1 var(--mono);
+  letter-spacing: .14em;
+}
+
+.shkb-hero-visual .frame {
+  aspect-ratio: 16 / 9;
+}
+
+.chapter-overview {
+  max-width: 1400px;
+  margin: 0 auto 98px;
+  display: grid;
+  grid-template-columns: 1.1fr .9fr;
+  gap: 18px;
+}
+
+.overview-card {
+  border: 1px solid rgba(223, 255, 0, .18);
+  border-radius: 30px;
+  background: linear-gradient(180deg, rgba(223, 255, 0, .07), rgba(20, 20, 20, .92));
+  padding: 28px;
+}
+
+.overview-card.main {
+  min-height: 260px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.overview-card b,
+.campaign-label,
+.video-card b,
+.proof-card b {
+  display: inline-flex;
+  color: #0a0a0a;
+  background: var(--acid);
+  border-radius: 999px;
+  padding: 7px 11px;
+  font: 900 10px/1 var(--mono);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.overview-card h2 {
+  max-width: 820px;
+  margin: 20px 0 0;
+  font: 900 clamp(34px, 5vw, 70px)/.9 var(--head);
+  letter-spacing: -.06em;
+  text-transform: uppercase;
+}
+
+.overview-card p {
+  margin: 18px 0 0;
+  max-width: 660px;
+  color: rgba(229, 226, 225, .72);
+  font-size: 16px;
+  line-height: 1.68;
+}
+
+.overview-list {
+  display: grid;
+  gap: 12px;
+}
+
+.overview-list .overview-card {
+  padding: 22px;
+}
+
+.overview-list h3 {
+  margin: 14px 0 0;
+  font: 900 28px/.95 var(--head);
+  letter-spacing: -.045em;
+  text-transform: uppercase;
+}
+
+.campaign-module {
+  max-width: 1400px;
+  margin: 0 auto 112px;
+  display: grid;
+  grid-template-columns: minmax(260px, 340px) minmax(0, 1fr);
+  gap: 52px;
+}
+
+.campaign-side {
+  position: sticky;
+  top: 124px;
+  align-self: start;
+}
+
+.campaign-side .num {
+  color: rgba(223, 255, 0, .48);
+  font: 900 58px/.8 var(--head);
+  letter-spacing: -.06em;
+}
+
+.campaign-side h2 {
+  margin: 16px 0 0;
+  font: 900 clamp(34px, 4.2vw, 62px)/.9 var(--head);
+  letter-spacing: -.06em;
+  text-transform: uppercase;
+}
+
+.campaign-side p {
+  margin: 18px 0 0;
+  color: rgba(229, 226, 225, .66);
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+.campaign-body {
+  min-width: 0;
+}
+
+.asset-grid {
+  display: grid;
+  grid-template-columns: 1.05fr .95fr;
+  gap: 18px;
+}
+
+.asset-card,
+.video-card,
+.proof-card {
+  position: relative;
+  border: 1px solid var(--line);
+  border-radius: 30px;
+  overflow: hidden;
+  background: #171717;
+  box-shadow: 0 22px 70px rgba(0, 0, 0, .34);
+}
+
+.asset-card.large {
+  grid-row: span 2;
+}
+
+.asset-card .visual {
+  aspect-ratio: 4 / 5;
+}
+
+.asset-card:not(.large) .visual,
+.proof-card .visual {
+  aspect-ratio: 16 / 11;
+}
+
+.asset-card .caption,
+.proof-card .caption {
+  padding: 20px 22px 24px;
+}
+
+.asset-card .caption h3,
+.proof-card .caption h3 {
+  margin: 14px 0 0;
+  font: 900 28px/.95 var(--head);
+  letter-spacing: -.045em;
+  text-transform: uppercase;
+}
+
+.asset-card .caption p,
+.proof-card .caption p {
+  margin: 10px 0 0;
+  color: rgba(229, 226, 225, .66);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.video-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.video-card {
+  min-height: 170px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background:
+    radial-gradient(circle at 84% 18%, rgba(223, 255, 0, .18), transparent 32%),
+    linear-gradient(135deg, rgba(223, 255, 0, .08), rgba(20, 20, 20, .96));
+}
+
+.video-card h3 {
+  margin: 16px 0 0;
+  font: 900 25px/.95 var(--head);
+  letter-spacing: -.045em;
+  text-transform: uppercase;
+}
+
+.video-card p {
+  margin: 10px 0 0;
+  color: rgba(229, 226, 225, .62);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.film-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 280px;
+  gap: 18px;
+  align-items: start;
+}
+
+.film-cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+
+.floating-proof {
+  transform: rotate(1.6deg);
+}
+
+.floating-proof .proof-card {
+  border-color: rgba(223, 255, 0, .28);
+}
+
+.proof-card .caption h3 {
+  font-size: 22px;
+}
+
+.filter-layout {
+  display: grid;
+  grid-template-columns: .78fr 1.22fr;
+  gap: 18px;
+  align-items: stretch;
+}
+
+.phone-card .visual {
+  aspect-ratio: 9 / 16;
+}
+
+.takeaway-stack {
+  max-width: 1400px;
+  margin: 0 auto 108px;
+  border: 1px solid rgba(223, 255, 0, .22);
+  border-radius: 40px;
+  padding: clamp(30px, 5vw, 58px);
+  background: linear-gradient(135deg, rgba(223, 255, 0, .12), rgba(20, 20, 20, .96));
+}
+
+.takeaway-stack h2 {
+  max-width: 920px;
+  margin: 0;
+  font: 900 clamp(38px, 6vw, 82px)/.88 var(--head);
+  letter-spacing: -.065em;
+  text-transform: uppercase;
+}
+
+.takeaway-stack p {
+  max-width: 760px;
+  margin: 22px 0 0;
+  color: rgba(229, 226, 225, .72);
+  font-size: 17px;
+  line-height: 1.65;
+}
+
+@media (max-width: 980px) {
+  .chapter-overview,
+  .campaign-module,
+  .asset-grid,
+  .film-layout,
+  .filter-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .campaign-side {
+    position: relative;
+    top: auto;
+  }
+
+  .film-layout {
+    gap: 24px;
+  }
+
+  .floating-proof {
+    max-width: 360px;
+    transform: rotate(0deg);
+  }
+}
+
+@media (max-width: 767px) {
+  .shkb-hero-visual {
+    border-radius: 24px;
+    margin-bottom: 64px;
+  }
+
+  .shkb-hero-visual .frame {
+    aspect-ratio: 4 / 5;
+  }
+
+  .chapter-overview {
+    gap: 14px;
+    margin-bottom: 68px;
+  }
+
+  .overview-card {
+    border-radius: 24px;
+    padding: 22px;
+  }
+
+  .overview-card h2 {
+    font-size: clamp(34px, 10vw, 48px);
+  }
+
+  .campaign-module {
+    gap: 24px;
+    margin-bottom: 76px;
+  }
+
+  .campaign-side .num {
+    font-size: 42px;
+  }
+
+  .asset-card,
+  .video-card,
+  .proof-card {
+    border-radius: 24px;
+  }
+
+  .asset-card.large {
+    grid-row: auto;
+  }
+
+  .asset-card .visual,
+  .asset-card:not(.large) .visual,
+  .proof-card .visual {
+    aspect-ratio: 4 / 5;
+  }
+
+  .video-row,
+  .film-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .video-card {
+    min-height: 145px;
+  }
+
+  .floating-proof {
+    max-width: none;
+  }
+
+  .takeaway-stack {
+    border-radius: 30px;
+    margin-bottom: 76px;
+  }
+}
