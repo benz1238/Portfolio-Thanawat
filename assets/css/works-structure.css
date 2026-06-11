@@ -1,0 +1,92 @@
+/* Works page structure refinements: portfolio weighting, text placeholders, and mobile CTA behavior. */
+
+.feature-card.is-hidden {
+  display: none;
+}
+
+.text-card .text-thumb {
+  aspect-ratio: 16 / 9;
+  min-height: 180px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 24px;
+  background:
+    radial-gradient(circle at 78% 18%, rgba(223, 255, 0, .2), transparent 32%),
+    linear-gradient(135deg, rgba(223, 255, 0, .12), rgba(26, 26, 25, .96));
+  border-bottom: 1px solid rgba(223, 255, 0, .16);
+}
+
+.text-card .text-thumb span {
+  font: 800 11px/1 var(--mono);
+  letter-spacing: .16em;
+  color: var(--acid);
+  text-transform: uppercase;
+}
+
+.text-card .text-thumb strong {
+  display: block;
+  margin-top: 8px;
+  font: 900 clamp(30px, 3.3vw, 46px)/.9 var(--head);
+  letter-spacing: -.055em;
+  color: var(--text);
+  text-transform: uppercase;
+}
+
+.work-item[data-category="spotlight"] {
+  border-color: rgba(223, 255, 0, .22);
+}
+
+.work-item[data-category="spotlight"] .item-copy b {
+  color: #fff;
+  background: var(--acid);
+  color: #0a0a0a;
+  border-radius: 999px;
+  padding: 6px 10px;
+  display: inline-flex;
+}
+
+@media (max-width: 767px) {
+  .filters {
+    gap: 9px;
+  }
+
+  .filter-btn {
+    padding: 11px 12px;
+    font-size: 10px;
+  }
+
+  .text-card .text-thumb {
+    min-height: 150px;
+    padding: 20px;
+  }
+
+  .contact-trigger {
+    width: 100%;
+    max-width: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .contact-options {
+    position: static;
+    width: 100%;
+    max-height: 0;
+    margin-top: 0;
+    padding: 0 10px;
+    overflow: hidden;
+    opacity: 0;
+    transform: none;
+    box-shadow: none;
+    border-radius: 24px;
+  }
+
+  .contact-options.open {
+    max-height: 240px;
+    margin-top: 10px;
+    padding: 10px;
+    opacity: 1;
+    transform: none;
+  }
+}
