@@ -1,37 +1,62 @@
-/* Shokubutsu safe layout pass: controlled overlap, readable copy column, no broken crops. */
+/* Shokubutsu safe layout pass: controlled overlap, readable copy column, real media ratios, tighter rhythm. */
 
 @media (min-width: 981px) {
+  .shkb-orbit-hero {
+    min-height: 52vh !important;
+    padding-bottom: 48px !important;
+  }
+
+  .stack-nav {
+    margin-bottom: 72px !important;
+  }
+
   .campaign-chapter {
-    grid-template-columns: minmax(260px, 30%) minmax(0, 70%) !important;
-    gap: clamp(34px, 4vw, 64px) !important;
+    grid-template-columns: minmax(250px, 29%) minmax(0, 71%) !important;
+    gap: clamp(38px, 4.4vw, 74px) !important;
     align-items: start;
+    margin-bottom: 108px !important;
   }
 
   .chapter-copy {
-    max-width: 360px;
+    max-width: 340px;
     overflow: visible;
   }
 
   .chapter-copy h2 {
-    max-width: 350px;
-    font-size: clamp(44px, 4.05vw, 68px) !important;
-    line-height: .92 !important;
-    letter-spacing: -0.032em !important;
+    max-width: 330px;
+    font-size: clamp(38px, 3.35vw, 58px) !important;
+    line-height: .94 !important;
+    letter-spacing: -0.028em !important;
     text-wrap: balance;
   }
 
   .chapter-copy p {
-    max-width: 315px;
+    max-width: 310px;
     font-size: 14px;
     line-height: 1.58;
   }
 
-  /* 01 Vacation: controlled collage, not a pile. */
+  .media-caption h3,
+  .embed-copy h3,
+  .archive-note h3 {
+    font-size: clamp(22px, 1.55vw, 30px) !important;
+    line-height: 1 !important;
+  }
+
+  .media-caption p,
+  .embed-copy p,
+  .archive-note p,
+  .role-note p {
+    font-size: 14px !important;
+    line-height: 1.5 !important;
+  }
+
+  /* 01 Vacation: intentional small overlap only. */
   .chapter-vacation .vacation-wall {
     display: grid !important;
     grid-template-columns: repeat(12, minmax(0, 1fr)) !important;
     grid-template-rows: auto auto auto !important;
-    gap: 18px !important;
+    gap: 16px !important;
     align-items: start !important;
     overflow: visible;
   }
@@ -44,34 +69,34 @@
   }
 
   .chapter-vacation .kv-main {
-    grid-column: 1 / 11 !important;
+    grid-column: 1 / 10 !important;
     grid-row: 1 / 2 !important;
-    transform: rotate(.15deg) !important;
+    transform: rotate(.12deg) !important;
     z-index: 1;
   }
 
   .chapter-vacation .kv-support {
-    grid-column: 7 / -1 !important;
+    grid-column: 8 / -1 !important;
     grid-row: 1 / 2 !important;
     align-self: start;
-    margin-top: 42px;
-    transform: translateX(0) rotate(-.45deg) !important;
+    margin-top: 30px;
+    transform: rotate(-.35deg) !important;
     z-index: 3;
   }
 
-  .chapter-vacation .kv-support .frame-kv-support {
-    aspect-ratio: 16 / 8.2 !important;
+  .chapter-vacation .kv-support .media-caption {
+    padding: 14px 16px 16px !important;
   }
 
-  .chapter-vacation .kv-support .media-caption {
-    max-width: 100%;
+  .chapter-vacation .kv-support .media-caption p {
+    display: none;
   }
 
   .chapter-vacation .external-video-card {
     grid-column: 8 / -1 !important;
     grid-row: 2 / 3 !important;
-    margin-top: -22px;
-    z-index: 4;
+    margin-top: -8px;
+    z-index: 2;
   }
 
   .chapter-vacation .video-embed-card:nth-of-type(4) {
@@ -82,77 +107,98 @@
   .chapter-vacation .video-embed-card:nth-of-type(5) {
     grid-column: 7 / -1 !important;
     grid-row: 3 / 4 !important;
-    margin-top: 0;
   }
 
-  .chapter-vacation .frame-kv {
-    aspect-ratio: 16 / 8.3 !important;
+  .chapter-vacation .frame-kv,
+  .chapter-vacation .frame-kv-support {
+    aspect-ratio: 16 / 8.25 !important;
+    min-height: 0 !important;
   }
 
   .chapter-vacation .media-frame img {
     padding: 8px !important;
   }
 
-  .chapter-vacation .media-caption h3 {
-    font-size: clamp(24px, 2vw, 34px) !important;
-  }
-
-  /* 02 Film: main film + side proofs, no text/media collision. */
+  /* 02 Film: main film + proof cards, safe boundaries. */
   .film-stage {
     display: grid !important;
-    grid-template-columns: minmax(0, 1fr) minmax(220px, 290px) !important;
+    grid-template-columns: minmax(0, 1fr) minmax(210px, 280px) !important;
     grid-template-areas:
       "main proof"
       "cut proof"
       "role proof" !important;
-    gap: 18px !important;
+    gap: 16px !important;
   }
 
   .film-main { grid-area: main !important; }
   .film-cut { grid-area: cut !important; max-width: 82% !important; justify-self: end !important; }
   .role-note { grid-area: role !important; max-width: 82% !important; justify-self: end !important; }
-  .proof-strip { grid-area: proof !important; transform: none !important; margin-top: 24px; }
+  .proof-strip { grid-area: proof !important; transform: none !important; margin-top: 18px; gap: 14px !important; }
 
   .proof-card:nth-child(2) {
-    transform: rotate(-1.8deg) translateX(-8px) !important;
+    transform: rotate(-1.2deg) translateX(-6px) !important;
   }
 
-  /* 03 IG Filter: phone artifact centered with note. */
+  /* 03 IG Filter: real portrait asset, not wide. */
   .filter-stage.single-filter {
-    grid-template-columns: minmax(0, .92fr) minmax(240px, .42fr) !important;
+    grid-template-columns: minmax(280px, 430px) minmax(220px, .55fr) !important;
+    gap: 28px !important;
+    align-items: center !important;
+    justify-content: start;
   }
 
   .single-filter .phone-object {
-    transform: rotate(-.35deg) !important;
+    width: min(430px, 100%) !important;
+    max-width: 430px !important;
+    justify-self: start !important;
+    border-radius: 34px;
+    transform: rotate(-.25deg) !important;
+  }
+
+  .single-filter .frame-phone {
+    aspect-ratio: 9 / 16 !important;
+    min-height: 0 !important;
+  }
+
+  .single-filter .frame-phone img {
+    object-fit: contain !important;
+    padding: 8px !important;
   }
 
   .single-filter .archive-note {
-    margin-top: 84px !important;
+    margin-top: 0 !important;
+    max-width: 360px;
   }
 
-  /* 04 Whip: craft cards sit safely away from headline. */
+  /* 04 Whip: slightly quieter, no collision. */
   .craft-stage {
     max-width: none !important;
-    grid-template-columns: minmax(0, .68fr) minmax(260px, .46fr) !important;
+    grid-template-columns: minmax(0, .7fr) minmax(250px, .45fr) !important;
+    gap: 16px !important;
   }
 
   .craft-main {
-    transform: rotate(.2deg) !important;
+    transform: rotate(.15deg) !important;
   }
 
   .craft-support {
-    transform: rotate(-.6deg) translateY(34px) !important;
+    transform: rotate(-.45deg) translateY(24px) !important;
   }
 }
 
 @media (max-width: 1400px) and (min-width: 981px) {
+  .campaign-chapter {
+    grid-template-columns: minmax(230px, 31%) minmax(0, 69%) !important;
+    gap: 46px !important;
+  }
+
   .chapter-copy h2 {
-    font-size: clamp(40px, 3.65vw, 58px) !important;
-    max-width: 315px;
+    font-size: clamp(36px, 3vw, 50px) !important;
+    max-width: 300px;
   }
 
   .chapter-copy p {
-    max-width: 300px;
+    max-width: 290px;
   }
 
   .chapter-vacation .kv-main {
@@ -160,8 +206,8 @@
   }
 
   .chapter-vacation .kv-support {
-    grid-column: 7 / -1 !important;
-    margin-top: 32px;
+    grid-column: 8 / -1 !important;
+    margin-top: 24px;
   }
 }
 
@@ -190,21 +236,111 @@
     margin-top: 0 !important;
     transform: none !important;
   }
+
+  .filter-stage.single-filter {
+    grid-template-columns: 1fr !important;
+  }
+
+  .single-filter .phone-object {
+    width: min(420px, 100%) !important;
+    max-width: 420px !important;
+    justify-self: center !important;
+  }
+
+  .single-filter .frame-phone {
+    aspect-ratio: 9 / 16 !important;
+  }
 }
 
 @media (max-width: 767px) {
-  .chapter-vacation .vacation-wall,
-  .film-stage,
-  .filter-stage.single-filter,
-  .craft-stage {
-    gap: 12px !important;
+  .shkb-orbit-hero {
+    padding-bottom: 22px !important;
+  }
+
+  .stack-nav {
+    margin-bottom: 34px !important;
+  }
+
+  .campaign-chapter {
+    gap: 14px !important;
+    margin-bottom: 46px !important;
   }
 
   .chapter-copy h2 {
     text-wrap: balance;
+    font-size: clamp(30px, 8.6vw, 42px) !important;
+    line-height: .96 !important;
+  }
+
+  .chapter-copy p {
+    font-size: 13.5px !important;
+    line-height: 1.52 !important;
+  }
+
+  .chapter-vacation .vacation-wall,
+  .film-stage,
+  .filter-stage.single-filter,
+  .craft-stage {
+    gap: 10px !important;
+  }
+
+  .media-caption,
+  .embed-copy {
+    padding: 14px 16px 16px !important;
+  }
+
+  .media-caption h3,
+  .embed-copy h3,
+  .archive-note h3 {
+    font-size: 22px !important;
+    line-height: 1 !important;
+  }
+
+  .chapter-vacation .frame-kv,
+  .chapter-vacation .frame-kv-support,
+  .craft-stage .frame-kv,
+  .craft-stage .frame-wide {
+    aspect-ratio: 16 / 9 !important;
+  }
+
+  .single-filter .frame-phone {
+    aspect-ratio: 9 / 16 !important;
+  }
+
+  .single-filter .phone-object {
+    width: min(390px, 100%) !important;
+  }
+
+  .external-link {
+    min-height: 104px !important;
+    padding: 16px !important;
+  }
+
+  .external-link strong {
+    font-size: 24px !important;
+    line-height: .96 !important;
+  }
+
+  .role-note,
+  .archive-note {
+    padding: 16px !important;
   }
 
   .proof-strip {
     grid-template-columns: 1fr 1fr !important;
+    gap: 10px !important;
+  }
+
+  .proof-caption {
+    padding: 11px !important;
+  }
+
+  .proof-caption p {
+    font-size: 11px !important;
+    line-height: 1.4 !important;
+  }
+
+  .takeaway-stack {
+    margin-bottom: 54px !important;
   }
 }
