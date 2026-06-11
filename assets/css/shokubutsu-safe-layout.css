@@ -1,46 +1,212 @@
-/* Shokubutsu safe layout pass: controlled overlap, readable copy column, real media ratios, tighter rhythm. */
+/* Shokubutsu final locked layout pass.
+   Purpose: stop text overflow, dead space, random overlaps, wrong media ratios, and mobile jumps. */
 
+:root {
+  --shkb-page-max: 1360px;
+  --shkb-copy: 320px;
+  --shkb-gap: clamp(32px, 4vw, 56px);
+  --shkb-card-gap: 14px;
+}
+
+.shkb-page main {
+  overflow-x: hidden !important;
+}
+
+.shkb-page .reveal {
+  will-change: opacity, transform;
+}
+
+/* ========== GLOBAL LOCKS ========== */
+.shkb-page *,
+.shkb-page *::before,
+.shkb-page *::after {
+  box-sizing: border-box;
+}
+
+.shkb-page img,
+.shkb-page iframe {
+  max-width: 100%;
+}
+
+.media-card,
+.video-embed-card,
+.external-video-card,
+.role-note,
+.archive-note,
+.proof-card,
+.stack-nav a,
+.hero-brief {
+  overflow: hidden !important;
+  max-width: 100%;
+}
+
+.fit-contain img {
+  object-fit: contain !important;
+}
+
+.media-frame,
+.embed-frame,
+.proof-frame {
+  min-height: 0 !important;
+}
+
+.media-frame img,
+.proof-frame img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* ========== TYPO LOCK ========== */
+.shkb-orbit-hero h1,
+.chapter-copy h2,
+.takeaway-stack h2 {
+  letter-spacing: -0.028em !important;
+  line-height: .92 !important;
+  text-wrap: balance;
+  overflow-wrap: normal;
+}
+
+.media-caption h3,
+.embed-copy h3,
+.archive-note h3,
+.external-link strong,
+.stack-nav a {
+  letter-spacing: -0.018em !important;
+  line-height: 1 !important;
+  text-wrap: balance;
+}
+
+.hero-brief p,
+.chapter-copy p,
+.media-caption p,
+.embed-copy p,
+.role-note p,
+.archive-note p,
+.proof-caption p,
+.takeaway-stack p {
+  letter-spacing: 0 !important;
+  line-height: 1.55 !important;
+}
+
+/* ========== HERO ========== */
 @media (min-width: 981px) {
   .shkb-orbit-hero {
-    min-height: 52vh !important;
-    padding-bottom: 48px !important;
+    max-width: var(--shkb-page-max) !important;
+    min-height: 520px !important;
+    margin: 0 auto 34px !important;
+    padding: 72px 0 58px !important;
+    display: grid !important;
+    grid-template-columns: minmax(260px, 38%) minmax(0, 62%) !important;
+    gap: var(--shkb-gap) !important;
+    align-items: end !important;
+    overflow: hidden !important;
+  }
+
+  .hero-wording {
+    grid-column: 2 !important;
+    justify-self: start !important;
+    width: min(760px, 100%) !important;
+    max-width: 760px !important;
+    min-width: 0 !important;
+    z-index: 3;
+  }
+
+  .shkb-orbit-hero h1 {
+    width: 100% !important;
+    max-width: 760px !important;
+    margin: 0 !important;
+    font-size: clamp(72px, 7vw, 118px) !important;
+  }
+
+  .hero-brief {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+    align-self: end !important;
+    justify-self: start !important;
+    width: min(430px, 100%) !important;
+    max-width: 430px !important;
+    transform: rotate(-.35deg) !important;
+    padding: 22px !important;
+  }
+
+  .hero-brief p {
+    font-size: 15px !important;
+  }
+
+  .orbital-core {
+    left: 52% !important;
+    width: min(74vw, 900px) !important;
+    opacity: .78;
+  }
+
+  .orbit-tag {
+    max-width: max-content;
+    white-space: nowrap;
   }
 
   .stack-nav {
-    margin-bottom: 72px !important;
+    max-width: var(--shkb-page-max) !important;
+    margin: 0 auto 64px !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+  }
+}
+
+/* ========== DESKTOP SECTION MASTER GRID ========== */
+@media (min-width: 981px) {
+  .campaign-chapter {
+    max-width: var(--shkb-page-max) !important;
+    margin: 0 auto 96px !important;
+    display: grid !important;
+    grid-template-columns: var(--shkb-copy) minmax(0, 1fr) !important;
+    gap: var(--shkb-gap) !important;
+    align-items: start !important;
+    overflow: visible !important;
   }
 
-  .campaign-chapter {
-    grid-template-columns: minmax(250px, 29%) minmax(0, 71%) !important;
-    gap: clamp(38px, 4.4vw, 74px) !important;
-    align-items: start;
-    margin-bottom: 108px !important;
+  .campaign-chapter::before {
+    left: calc(var(--shkb-copy) + (var(--shkb-gap) / 2)) !important;
+    opacity: .62;
   }
 
   .chapter-copy {
-    max-width: 340px;
-    overflow: visible;
+    width: var(--shkb-copy) !important;
+    max-width: var(--shkb-copy) !important;
+    position: sticky !important;
+    top: 116px !important;
+    align-self: start !important;
+    z-index: 2 !important;
+    overflow: visible !important;
+  }
+
+  .chapter-copy .num {
+    font-size: clamp(48px, 4.6vw, 76px) !important;
+    line-height: .78 !important;
   }
 
   .chapter-copy h2 {
-    max-width: 330px;
-    font-size: clamp(38px, 3.35vw, 58px) !important;
-    line-height: .94 !important;
-    letter-spacing: -0.028em !important;
-    text-wrap: balance;
+    max-width: 100% !important;
+    margin-top: 16px !important;
+    font-size: clamp(34px, 3vw, 52px) !important;
   }
 
   .chapter-copy p {
-    max-width: 310px;
-    font-size: 14px;
-    line-height: 1.58;
+    max-width: 300px !important;
+    margin-top: 16px !important;
+    font-size: 14px !important;
+  }
+
+  .media-caption,
+  .embed-copy {
+    padding: 18px 20px 20px !important;
   }
 
   .media-caption h3,
   .embed-copy h3,
   .archive-note h3 {
+    margin-top: 12px !important;
     font-size: clamp(22px, 1.55vw, 30px) !important;
-    line-height: 1 !important;
   }
 
   .media-caption p,
@@ -48,17 +214,18 @@
   .archive-note p,
   .role-note p {
     font-size: 14px !important;
-    line-height: 1.5 !important;
   }
+}
 
-  /* 01 Vacation: intentional small overlap only. */
+/* ========== 01 VACATION: CONTROLLED COLLAGE ========== */
+@media (min-width: 981px) {
   .chapter-vacation .vacation-wall {
     display: grid !important;
     grid-template-columns: repeat(12, minmax(0, 1fr)) !important;
-    grid-template-rows: auto auto auto !important;
-    gap: 16px !important;
+    grid-auto-rows: auto !important;
+    gap: var(--shkb-card-gap) !important;
     align-items: start !important;
-    overflow: visible;
+    overflow: visible !important;
   }
 
   .chapter-vacation .kv-main,
@@ -66,47 +233,40 @@
   .chapter-vacation .external-video-card,
   .chapter-vacation .video-embed-card {
     grid-area: auto !important;
+    max-width: 100% !important;
+    justify-self: stretch !important;
   }
 
   .chapter-vacation .kv-main {
     grid-column: 1 / 10 !important;
-    grid-row: 1 / 2 !important;
-    transform: rotate(.12deg) !important;
-    z-index: 1;
+    grid-row: 1 !important;
+    z-index: 1 !important;
+    transform: rotate(.08deg) !important;
   }
 
   .chapter-vacation .kv-support {
     grid-column: 8 / -1 !important;
-    grid-row: 1 / 2 !important;
-    align-self: start;
-    margin-top: 30px;
-    transform: rotate(-.35deg) !important;
-    z-index: 3;
-  }
-
-  .chapter-vacation .kv-support .media-caption {
-    padding: 14px 16px 16px !important;
-  }
-
-  .chapter-vacation .kv-support .media-caption p {
-    display: none;
+    grid-row: 1 !important;
+    z-index: 3 !important;
+    margin-top: 26px !important;
+    transform: rotate(-.25deg) !important;
   }
 
   .chapter-vacation .external-video-card {
-    grid-column: 8 / -1 !important;
-    grid-row: 2 / 3 !important;
-    margin-top: -8px;
-    z-index: 2;
+    grid-column: 1 / 5 !important;
+    grid-row: 2 !important;
+    margin: 0 !important;
+    transform: none !important;
   }
 
   .chapter-vacation .video-embed-card:nth-of-type(4) {
-    grid-column: 1 / 7 !important;
-    grid-row: 2 / 3 !important;
+    grid-column: 5 / 9 !important;
+    grid-row: 2 !important;
   }
 
   .chapter-vacation .video-embed-card:nth-of-type(5) {
-    grid-column: 7 / -1 !important;
-    grid-row: 3 / 4 !important;
+    grid-column: 9 / -1 !important;
+    grid-row: 2 !important;
   }
 
   .chapter-vacation .frame-kv,
@@ -115,44 +275,100 @@
     min-height: 0 !important;
   }
 
-  .chapter-vacation .media-frame img {
+  .chapter-vacation .kv-main .media-frame img,
+  .chapter-vacation .kv-support .media-frame img {
     padding: 8px !important;
   }
 
-  /* 02 Film: main film + proof cards, safe boundaries. */
+  .chapter-vacation .kv-support .media-caption {
+    padding: 14px 16px 16px !important;
+  }
+
+  .chapter-vacation .kv-support .media-caption p {
+    display: none !important;
+  }
+
+  .chapter-vacation .kv-support .media-caption h3 {
+    font-size: clamp(20px, 1.35vw, 25px) !important;
+  }
+
+  .chapter-vacation .external-link {
+    min-height: 150px !important;
+  }
+}
+
+/* ========== 02 NUMBER 1: FILM + PROOF RAIL ========== */
+@media (min-width: 981px) {
   .film-stage {
     display: grid !important;
-    grid-template-columns: minmax(0, 1fr) minmax(210px, 280px) !important;
-    grid-template-areas:
-      "main proof"
-      "cut proof"
-      "role proof" !important;
-    gap: 16px !important;
+    grid-template-columns: repeat(12, minmax(0, 1fr)) !important;
+    gap: var(--shkb-card-gap) !important;
+    align-items: start !important;
   }
 
-  .film-main { grid-area: main !important; }
-  .film-cut { grid-area: cut !important; max-width: 82% !important; justify-self: end !important; }
-  .role-note { grid-area: role !important; max-width: 82% !important; justify-self: end !important; }
-  .proof-strip { grid-area: proof !important; transform: none !important; margin-top: 18px; gap: 14px !important; }
+  .film-main {
+    grid-column: 1 / 9 !important;
+    grid-row: 1 !important;
+    max-width: none !important;
+  }
 
+  .film-cut {
+    grid-column: 1 / 6 !important;
+    grid-row: 2 !important;
+    max-width: none !important;
+    justify-self: stretch !important;
+  }
+
+  .role-note {
+    grid-column: 6 / 9 !important;
+    grid-row: 2 !important;
+    max-width: none !important;
+    min-height: 100% !important;
+    justify-self: stretch !important;
+    padding: 20px !important;
+  }
+
+  .proof-strip {
+    grid-column: 9 / -1 !important;
+    grid-row: 1 / 3 !important;
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: var(--shkb-card-gap) !important;
+    margin: 0 !important;
+    transform: none !important;
+    align-self: start !important;
+  }
+
+  .proof-card,
   .proof-card:nth-child(2) {
-    transform: rotate(-1.2deg) translateX(-6px) !important;
+    transform: none !important;
   }
 
-  /* 03 IG Filter: real portrait asset, not wide. */
+  .proof-frame {
+    aspect-ratio: 4 / 5 !important;
+  }
+
+  .proof-frame img {
+    padding: 8px !important;
+  }
+}
+
+/* ========== 03 IG FILTER: PORTRAIT ARTIFACT ========== */
+@media (min-width: 981px) {
   .filter-stage.single-filter {
-    grid-template-columns: minmax(280px, 430px) minmax(220px, .55fr) !important;
+    display: grid !important;
+    grid-template-columns: minmax(280px, 420px) minmax(220px, 340px) !important;
     gap: 28px !important;
     align-items: center !important;
-    justify-content: start;
+    justify-content: start !important;
   }
 
   .single-filter .phone-object {
-    width: min(430px, 100%) !important;
-    max-width: 430px !important;
+    width: min(420px, 100%) !important;
+    max-width: 420px !important;
     justify-self: start !important;
-    border-radius: 34px;
-    transform: rotate(-.25deg) !important;
+    border-radius: 32px !important;
+    transform: none !important;
   }
 
   .single-filter .frame-phone {
@@ -166,84 +382,98 @@
   }
 
   .single-filter .archive-note {
-    margin-top: 0 !important;
-    max-width: 360px;
+    width: min(340px, 100%) !important;
+    max-width: 340px !important;
+    margin: 0 !important;
+    padding: 22px !important;
+    align-self: center !important;
   }
+}
 
-  /* 04 Whip: slightly quieter, no collision. */
+/* ========== 04 WHIP FOAM: QUIET SUPPORT SECTION ========== */
+@media (min-width: 981px) {
   .craft-stage {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1.05fr) minmax(240px, .72fr) !important;
+    gap: var(--shkb-card-gap) !important;
     max-width: none !important;
-    grid-template-columns: minmax(0, .7fr) minmax(250px, .45fr) !important;
-    gap: 16px !important;
+    align-items: start !important;
   }
 
-  .craft-main {
-    transform: rotate(.15deg) !important;
-  }
-
+  .craft-main,
   .craft-support {
-    transform: rotate(-.45deg) translateY(24px) !important;
-  }
-}
-
-@media (max-width: 1400px) and (min-width: 981px) {
-  .campaign-chapter {
-    grid-template-columns: minmax(230px, 31%) minmax(0, 69%) !important;
-    gap: 46px !important;
-  }
-
-  .chapter-copy h2 {
-    font-size: clamp(36px, 3vw, 50px) !important;
-    max-width: 300px;
-  }
-
-  .chapter-copy p {
-    max-width: 290px;
-  }
-
-  .chapter-vacation .kv-main {
-    grid-column: 1 / 10 !important;
-  }
-
-  .chapter-vacation .kv-support {
-    grid-column: 8 / -1 !important;
-    margin-top: 24px;
-  }
-}
-
-@media (max-width: 980px) {
-  .campaign-chapter {
-    grid-template-columns: 1fr !important;
-  }
-
-  .chapter-copy h2,
-  .chapter-copy p {
-    max-width: none;
-  }
-
-  .chapter-vacation .kv-main,
-  .chapter-vacation .kv-support,
-  .chapter-vacation .external-video-card,
-  .chapter-vacation .video-embed-card,
-  .film-main,
-  .film-cut,
-  .role-note,
-  .proof-strip {
-    grid-area: auto !important;
-    grid-column: auto !important;
-    max-width: none !important;
-    justify-self: stretch !important;
-    margin-top: 0 !important;
     transform: none !important;
   }
 
-  .filter-stage.single-filter {
+  .craft-support {
+    margin-top: 28px !important;
+  }
+
+  .craft-stage .frame-kv,
+  .craft-stage .frame-wide {
+    aspect-ratio: 16 / 10 !important;
+    min-height: 0 !important;
+  }
+}
+
+/* ========== TAKEAWAY ========== */
+.takeaway-stack {
+  max-width: var(--shkb-page-max) !important;
+}
+
+/* ========== TABLET / MOBILE LOCKS ========== */
+@media (max-width: 980px) {
+  .shkb-orbit-hero,
+  .campaign-chapter,
+  .vacation-wall,
+  .film-stage,
+  .filter-stage.single-filter,
+  .craft-stage {
     grid-template-columns: 1fr !important;
+  }
+
+  .shkb-orbit-hero {
+    min-height: auto !important;
+    overflow: hidden !important;
+  }
+
+  .hero-wording,
+  .hero-brief,
+  .chapter-copy,
+  .chapter-copy h2,
+  .chapter-copy p,
+  .film-main,
+  .film-cut,
+  .role-note,
+  .proof-strip,
+  .single-filter .phone-object,
+  .single-filter .archive-note {
+    grid-column: auto !important;
+    grid-row: auto !important;
+    max-width: none !important;
+    width: 100% !important;
+    justify-self: stretch !important;
+    margin: 0 !important;
+    transform: none !important;
+    position: relative !important;
+    top: auto !important;
+  }
+
+  .chapter-copy {
+    width: 100% !important;
+  }
+
+  .campaign-chapter::before {
+    display: none !important;
+  }
+
+  .proof-strip {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
   }
 
   .single-filter .phone-object {
     width: min(420px, 100%) !important;
-    max-width: 420px !important;
     justify-self: center !important;
   }
 
@@ -254,11 +484,38 @@
 
 @media (max-width: 767px) {
   .shkb-orbit-hero {
-    padding-bottom: 22px !important;
+    padding-top: 24px !important;
+    padding-bottom: 24px !important;
+    gap: 16px !important;
+    margin-bottom: 8px !important;
+  }
+
+  .shkb-orbit-hero h1 {
+    font-size: clamp(46px, 13.5vw, 68px) !important;
+    line-height: .9 !important;
+    max-width: 100% !important;
+  }
+
+  .hero-brief {
+    padding: 16px !important;
+    border-radius: 20px !important;
+  }
+
+  .hero-brief p {
+    font-size: 13px !important;
+    line-height: 1.52 !important;
   }
 
   .stack-nav {
-    margin-bottom: 34px !important;
+    margin-bottom: 32px !important;
+    gap: 8px !important;
+  }
+
+  .stack-nav a {
+    min-height: 56px !important;
+    padding: 12px 14px !important;
+    font-size: 15px !important;
+    border-radius: 17px !important;
   }
 
   .campaign-chapter {
@@ -266,34 +523,27 @@
     margin-bottom: 46px !important;
   }
 
+  .chapter-copy .num {
+    font-size: 40px !important;
+  }
+
   .chapter-copy h2 {
-    text-wrap: balance;
-    font-size: clamp(30px, 8.6vw, 42px) !important;
+    margin-top: 12px !important;
+    font-size: clamp(30px, 8.4vw, 42px) !important;
     line-height: .96 !important;
   }
 
   .chapter-copy p {
+    margin-top: 12px !important;
     font-size: 13.5px !important;
     line-height: 1.52 !important;
   }
 
-  .chapter-vacation .vacation-wall,
+  .vacation-wall,
   .film-stage,
   .filter-stage.single-filter,
   .craft-stage {
     gap: 10px !important;
-  }
-
-  .media-caption,
-  .embed-copy {
-    padding: 14px 16px 16px !important;
-  }
-
-  .media-caption h3,
-  .embed-copy h3,
-  .archive-note h3 {
-    font-size: 22px !important;
-    line-height: 1 !important;
   }
 
   .chapter-vacation .frame-kv,
@@ -303,12 +553,35 @@
     aspect-ratio: 16 / 9 !important;
   }
 
+  .single-filter .phone-object {
+    width: min(380px, 100%) !important;
+    justify-self: center !important;
+  }
+
   .single-filter .frame-phone {
     aspect-ratio: 9 / 16 !important;
   }
 
-  .single-filter .phone-object {
-    width: min(390px, 100%) !important;
+  .media-caption,
+  .embed-copy,
+  .proof-caption,
+  .archive-note,
+  .role-note {
+    padding: 14px 16px 16px !important;
+  }
+
+  .media-caption h3,
+  .embed-copy h3,
+  .archive-note h3 {
+    font-size: 22px !important;
+  }
+
+  .media-caption p,
+  .embed-copy p,
+  .archive-note p,
+  .role-note p {
+    font-size: 13px !important;
+    line-height: 1.45 !important;
   }
 
   .external-link {
@@ -318,29 +591,28 @@
 
   .external-link strong {
     font-size: 24px !important;
-    line-height: .96 !important;
-  }
-
-  .role-note,
-  .archive-note {
-    padding: 16px !important;
   }
 
   .proof-strip {
-    grid-template-columns: 1fr 1fr !important;
     gap: 10px !important;
   }
 
-  .proof-caption {
-    padding: 11px !important;
+  .proof-frame {
+    aspect-ratio: 4 / 5 !important;
   }
 
   .proof-caption p {
     font-size: 11px !important;
-    line-height: 1.4 !important;
+    line-height: 1.35 !important;
   }
 
   .takeaway-stack {
     margin-bottom: 54px !important;
+  }
+}
+
+@media (max-width: 420px) {
+  .proof-strip {
+    grid-template-columns: 1fr !important;
   }
 }
