@@ -103,39 +103,49 @@
   }
 
   .wall {
-    gap: 26px;
+    position: relative;
+    gap: 22px;
     margin-bottom: 44px;
+    padding-left: 10px;
   }
 
-  .wall .card {
+  .wall::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 4px;
+    bottom: 4px;
+    width: 1px;
+    background: linear-gradient(180deg, rgba(223, 255, 0, .62), rgba(223, 255, 0, .08));
+    pointer-events: none;
+  }
+
+  .wall .card,
+  .wall .card:nth-child(even),
+  .wall .card:nth-child(3),
+  .wall .card:nth-child(5) {
     width: 100% !important;
+    margin: 0 !important;
     box-shadow: 0 18px 50px rgba(0, 0, 0, .42);
   }
 
-  .wall .card:nth-child(even) {
-    width: calc(100% - 18px) !important;
-    margin-left: auto;
-  }
-
-  .wall .card:nth-child(3),
-  .wall .card:nth-child(5) {
-    width: calc(100% - 12px) !important;
-    margin-right: auto;
-  }
-
-  .shoku .frame {
-    aspect-ratio: 4 / 5;
-  }
-
+  .frame,
+  .shoku .frame,
   .ext .frame,
-  .shell .frame {
-    aspect-ratio: 4 / 3;
-  }
-
+  .shell .frame,
   .air .frame,
   .birdy .frame,
   .paecal .frame {
     aspect-ratio: 16 / 10;
+  }
+
+  .shoku .frame {
+    aspect-ratio: 16 / 11;
+  }
+
+  .content,
+  .overlay .content {
+    padding: 22px 22px 26px;
   }
 
   .card.is-inview {
@@ -181,10 +191,24 @@
   }
 
   .contact-options {
-    left: 28px;
-    right: 28px;
-    width: auto;
-    top: calc(100% - 12px);
+    position: static;
+    width: 100%;
+    max-height: 0;
+    margin-top: 0;
+    padding: 0 10px;
+    overflow: hidden;
+    opacity: 0;
+    transform: none;
+    box-shadow: none;
+    border-radius: 24px;
+  }
+
+  .contact-options.open {
+    max-height: 240px;
+    margin-top: 10px;
+    padding: 10px;
+    opacity: 1;
+    transform: none;
   }
 }
 
@@ -222,6 +246,7 @@
   }
 
   .wall {
-    gap: 22px;
+    gap: 20px;
+    padding-left: 8px;
   }
 }
