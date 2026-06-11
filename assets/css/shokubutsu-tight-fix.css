@@ -1,0 +1,281 @@
+/* Final Shokubutsu fixes: remove duplicated hero feel, tighten mobile rhythm, and match media frames to actual asset ratios. */
+
+/* No reused Home capsule images on this detail page. */
+.shkb-orbit-hero .cap,
+.hero-board {
+  display: none !important;
+}
+
+/* The page should open into the campaign stack, not float forever before the work. */
+.shkb-orbit-hero {
+  min-height: 58vh;
+  margin-bottom: 20px;
+  padding-top: clamp(48px, 6vw, 92px);
+  padding-bottom: clamp(32px, 4.8vw, 70px);
+}
+
+.stack-nav {
+  margin-bottom: clamp(42px, 5.2vw, 72px);
+}
+
+.campaign-chapter {
+  margin-bottom: clamp(72px, 8vw, 116px);
+}
+
+/* Vacation KVs are wide campaign materials, not portrait cards. */
+.chapter-vacation .vacation-wall {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 18px;
+  align-items: start;
+}
+
+.chapter-vacation .kv-main {
+  grid-column: 1 / -1;
+  transform: rotate(.25deg);
+}
+
+.chapter-vacation .kv-support {
+  grid-column: 1 / 7;
+  transform: rotate(-.35deg);
+}
+
+.chapter-vacation .external-video-card {
+  grid-column: 7 / -1;
+}
+
+.chapter-vacation .video-embed-card:nth-of-type(4) {
+  grid-column: 1 / 7;
+}
+
+.chapter-vacation .video-embed-card:nth-of-type(5) {
+  grid-column: 7 / -1;
+}
+
+.chapter-vacation .frame-kv,
+.chapter-vacation .frame-kv-support {
+  min-height: 0;
+  aspect-ratio: 16 / 8.2;
+}
+
+.chapter-vacation .media-frame img {
+  padding: 10px;
+}
+
+/* Keep film hierarchy strong without leaving a dead desert of space. */
+.film-main .embed-frame {
+  min-height: 0;
+  aspect-ratio: 16 / 9;
+}
+
+.film-cut .embed-frame {
+  min-height: 0;
+  aspect-ratio: 16 / 9;
+}
+
+.role-note {
+  max-width: none;
+}
+
+/* On-set proof images: small, real, and never fallback to Home assets. */
+.proof-frame {
+  min-height: 0;
+  aspect-ratio: 4 / 5;
+}
+
+.proof-frame img {
+  padding: 8px;
+}
+
+/* IG archive currently has one real Supabase image only; use it as a wide saved artifact, not a fake phone mock. */
+.filter-stage.single-filter {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(250px, .48fr);
+  gap: 18px;
+  align-items: start;
+}
+
+.single-filter .phone-object {
+  max-width: none;
+  justify-self: stretch;
+  border-radius: 34px;
+  transform: rotate(-.45deg);
+}
+
+.single-filter .frame-phone {
+  min-height: 0;
+  aspect-ratio: 16 / 9;
+}
+
+.single-filter .media-frame img {
+  padding: 10px;
+}
+
+.single-filter .archive-note {
+  margin-top: 0;
+}
+
+/* Whip Foam is intentionally smaller than Vacation. */
+.craft-stage .frame-kv,
+.craft-stage .frame-wide {
+  min-height: 0;
+  aspect-ratio: 16 / 10;
+}
+
+.craft-stage .media-frame img {
+  padding: 10px;
+}
+
+@media (max-width: 980px) {
+  .chapter-vacation .vacation-wall,
+  .filter-stage.single-filter {
+    grid-template-columns: 1fr;
+  }
+
+  .chapter-vacation .kv-main,
+  .chapter-vacation .kv-support,
+  .chapter-vacation .external-video-card,
+  .chapter-vacation .video-embed-card:nth-of-type(4),
+  .chapter-vacation .video-embed-card:nth-of-type(5) {
+    grid-column: auto;
+  }
+
+  .film-stage {
+    grid-template-columns: 1fr;
+    grid-template-areas: none;
+  }
+
+  .film-main,
+  .film-cut,
+  .role-note,
+  .proof-strip {
+    grid-area: auto;
+    max-width: none;
+    justify-self: stretch;
+  }
+}
+
+@media (max-width: 767px) {
+  .shkb-orbit-hero {
+    min-height: auto;
+    margin-bottom: 14px;
+    padding-top: 26px;
+    padding-bottom: 30px;
+    gap: 18px;
+  }
+
+  .orbital-core {
+    width: 104vw;
+    opacity: .72;
+  }
+
+  .shkb-orbit-hero h1 {
+    font-size: clamp(50px, 15.5vw, 76px);
+    line-height: .8;
+  }
+
+  .work-kicker {
+    margin-bottom: 14px;
+  }
+
+  .hero-brief {
+    margin-top: 4px;
+    padding: 18px;
+    border-radius: 22px;
+  }
+
+  .hero-brief p {
+    font-size: 13px;
+    line-height: 1.55;
+    margin-bottom: 14px;
+  }
+
+  .meta-pill {
+    padding: 10px 12px;
+  }
+
+  .stack-nav {
+    margin-bottom: 44px;
+    gap: 8px;
+  }
+
+  .stack-nav a {
+    min-height: 58px;
+    padding: 13px 14px;
+    border-radius: 18px;
+    font-size: 16px;
+  }
+
+  .campaign-chapter {
+    gap: 18px;
+    margin-bottom: 58px;
+  }
+
+  .chapter-copy .num {
+    font-size: 42px;
+  }
+
+  .chapter-copy h2 {
+    margin-top: 12px;
+    font-size: clamp(32px, 9.5vw, 46px);
+    line-height: .86;
+  }
+
+  .chapter-copy p {
+    margin-top: 12px;
+    font-size: 14px;
+    line-height: 1.52;
+  }
+
+  .chapter-vacation .frame-kv,
+  .chapter-vacation .frame-kv-support,
+  .single-filter .frame-phone,
+  .craft-stage .frame-kv,
+  .craft-stage .frame-wide {
+    aspect-ratio: 16 / 9;
+  }
+
+  .media-caption,
+  .embed-copy {
+    padding: 16px 18px 18px;
+  }
+
+  .media-caption h3,
+  .embed-copy h3,
+  .archive-note h3 {
+    font-size: 24px;
+    line-height: .92;
+  }
+
+  .external-link {
+    min-height: 118px;
+    padding: 18px;
+  }
+
+  .external-link strong {
+    font-size: 26px;
+  }
+
+  .role-note,
+  .archive-note {
+    padding: 18px;
+  }
+
+  .proof-strip {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .proof-caption {
+    padding: 12px;
+  }
+
+  .proof-caption p {
+    font-size: 11px;
+    line-height: 1.4;
+  }
+
+  .takeaway-stack {
+    margin-bottom: 60px;
+  }
+}
